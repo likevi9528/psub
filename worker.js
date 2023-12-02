@@ -2952,6 +2952,7 @@ var src_default = {
     }
 
     const urlParam = url.searchParams.get("url");
+    const regexParam = url.searchParams.get("regex");
     if (!urlParam)
       return new Response("Missing URL parameter", { status: 400 });
     const backendParam = url.searchParams.get("bd");
@@ -3047,8 +3048,11 @@ var src_default = {
           new RegExp(Object.keys(replacements).join("|"), "g"),
           (match) => replacements[match] || match
         );
-        result = replaceIPAddresses(result);
-        return new Response(result, rpResponse);
+        var newResult = result
+        if (regexParam == '1'){
+          newResult = replaceIPAddresses(result);
+        }
+          return new Response(newResult, rpResponse);
       }
     }
     return rpResponse;
@@ -3057,7 +3061,7 @@ var src_default = {
 
 function replaceIPAddresses(inputText) {
   // 正则表达式用于匹配Cloudflare的IP地址：119.29.29.29 和 223.5.5.5
-  const cfIPRegex = /119\.29\.29\.29|223\.5\.5\.5/g;
+  const cfIPRegex  = /119\.29\.29\.29|223\.5\.5\.5|8\.8\.8\.8|8\.8\.4\.4/g;
 
   // 将匹配的IP地址替换为127.0.0.1
   const replacedText = inputText.replace(cfIPRegex, '127.0.0.1');
