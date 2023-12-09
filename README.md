@@ -28,8 +28,10 @@ KV或R2变量名：`SUB_BUCKET`
 指定log-level
 &loglevel=silent                   #silent, error, warning, info, debug
 
-指定mixed-port
+指定mixed-port，请自行校对，莫冲突
 &mixedport=7890
+&socksport=7891
+&httpport=7892
 
 
 ### 支持反代转换的协议

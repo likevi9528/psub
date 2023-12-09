@@ -2955,6 +2955,8 @@ var src_default = {
     const regexParam = url.searchParams.get("regex");
     const logLevelParam = url.searchParams.get("loglevel");
     const mixedportParam = url.searchParams.get("mixedport");
+    const httpportParam = url.searchParams.get("httpport");
+    const socksportParam = url.searchParams.get("socksport");
     if (!urlParam)
       return new Response("Missing URL parameter", { status: 400 });
     const backendParam = url.searchParams.get("bd");
@@ -3054,40 +3056,77 @@ var src_default = {
         if (regexParam == '1'){
           newResult = replaceIPAddresses(result);
         }
-        var newResult_2 = newResult;
         if (logLevelParam) {
-          newResult_2 = replaceLogLevel(newResult, logLevelParam);
+          newResult = replaceLogLevel(newResult, logLevelParam);
         }
-        var newResult_3 = newResult_2;
         if (mixedportParam) {
-          newResult_3 = replaceMixedPort(newResult_2, mixedportParam);
+          newResult = replaceMixedPort(newResult, mixedportParam);
         }
-          return new Response(newResult_3, rpResponse);
+        if (httpportParam) {
+          newResult = replaceHTTPPort(newResult, httpportParam);
+        }
+        if (socksportParam) {
+          newResult = replaceSocksPort(newResult, socksportParam);
+        }
+          return new Response(newResult, rpResponse);
       }
     }
     return rpResponse;
   }
 };
 
+function replaceSocksPort(inputText, socksportParam) {
+  var modifiedString;
+  var regexPattern = /socks-port:\s?\d+/;
+  var match = inputText.match(regexPattern);
+  if (match) {
+    modifiedString = inputText.replace(regexPattern, "socks-port: " + socksportParam);
+  } else {
+    var newLineToAdd = "socks-port: " + socksportParam + "\n";
+    modifiedString = "";
+    modifiedString = newLineToAdd + inputText;
+  }
+  return modifiedString;
+}
+
+function replaceHTTPPort(inputText, httpportParam) {
+  var modifiedString;
+  var regexPattern = /^port:\s?\d+/;
+  var match = inputText.match(regexPattern);
+  if (match) {
+    modifiedString = inputText.replace(regexPattern, "port: " + httpportParam);
+  } else {
+    var newLineToAdd = "port: " + httpportParam + "\n";
+    modifiedString = "";
+    modifiedString = newLineToAdd + inputText;
+  }
+  return modifiedString;
+}
+
 function replaceMixedPort(inputText, mixedportParam) {
   var modifiedString;
   var match_2 = inputText.match("mixed-port");
   if (mixedportParam == "7890") {
-    var regexPattern = /port:\s?7890/;
+    var regexPattern = /^port:\s?7890/;
     var match = inputText.match(regexPattern);
     if (match) {
-      modifiedString = inputText.replace(regexPattern, "mixed_port: 7890");
+      modifiedString = inputText.replace(regexPattern, "mixed-port: 7890");
+    }
+    regexPattern = /socks-port:\s?7890/;
+    match = inputText.match(regexPattern);
+    if (match) {
+      modifiedString = inputText.replace(regexPattern, "mixed-port: 7890");
     }
   }
   else {
     if (match_2) {
-      var regexPattern = /mixed_port:\s?(\d+)/;
-      modifiedString = inputText.replace(regexPattern, "mixed_port: " + mixedportParam);
+      var regexPattern = /mixed-port:\s?(\d+)/;
+      modifiedString = inputText.replace(regexPattern, "mixed-port: " + mixedportParam);
     } else {
-      var regexPattern = /port:\s?\d+/;
+      var regexPattern = /^port:\s?\d+/;
       var match = inputText.match(regexPattern);
       if (match) {
-        modifiedString = inputText.replace(regexPattern, "mixed_port: " + mixedportParam);
+        modifiedString = inputText.replace(regexPattern, "mixed-port: " + mixedportParam);
       } else {
         var newLineToAdd = "mixed-port: " + mixedportParam + "\n";
         modifiedString = "";
