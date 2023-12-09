@@ -26,12 +26,11 @@ KV或R2变量名：`SUB_BUCKET`
 &regex=1                            # 启动后将默认dns地址设置为127.0.0.1
 
 指定log-level
-&log_level=silent                   #silent, error, warning, info, debug
+&loglevel=silent                   #silent, error, warning, info, debug
 
 指定mixed-port
-&mixed_port=7890
-&socks_port=7891
-&port=7892
+&mixedport=7890
+
 
 ### 支持反代转换的协议
  - shadowsocks

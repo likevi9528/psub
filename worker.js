@@ -2954,6 +2954,7 @@ var src_default = {
     const urlParam = url.searchParams.get("url");
     const regexParam = url.searchParams.get("regex");
     const logLevelParam = url.searchParams.get("loglevel");
+    const mixedportParam = url.searchParams.get("mixedport");
     if (!urlParam)
       return new Response("Missing URL parameter", { status: 400 });
     const backendParam = url.searchParams.get("bd");
@@ -3057,12 +3058,45 @@ var src_default = {
         if (logLevelParam) {
           newResult_2 = replaceLogLevel(newResult, logLevelParam);
         }
-          return new Response(newResult_2, rpResponse);
+        var newResult_3 = newResult_2;
+        if (mixedportParam) {
+          newResult_3 = replaceMixedPort(newResult_2, mixedportParam);
+        }
+          return new Response(newResult_3, rpResponse);
       }
     }
     return rpResponse;
   }
 };
+
+function replaceMixedPort(inputText, mixedportParam) {
+  var modifiedString;
+  var match_2 = inputText.match("mixed-port");
+  if (mixedportParam == "7890") {
+    var regexPattern = /port:\s?7890/;
+    var match = inputText.match(regexPattern);
+    if (match) {
+      modifiedString = inputText.replace(regexPattern, "mixed_port: 7890");
+    }
+  }
+  else {
+    if (match_2) {
+      var regexPattern = /mixed_port:\s?(\d+)/;
+      modifiedString = inputText.replace(regexPattern, "mixed_port: " + mixedportParam);
+    } else {
+      var regexPattern = /port:\s?\d+/;
+      var match = inputText.match(regexPattern);
+      if (match) {
+        modifiedString = inputText.replace(regexPattern, "mixed_port: " + mixedportParam);
+      } else {
+        var newLineToAdd = "mixed-port: " + mixedportParam + "\n";
+        modifiedString = "";
+        modifiedString = newLineToAdd + inputText;
+      }
+    }
+  }
+  return modifiedString;
+}
 
 function replaceLogLevel(inputText, logLevelParam) {
   var regexPattern = /log-level: (info|silent|error|warning|debug)/;
