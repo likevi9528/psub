@@ -2953,7 +2953,7 @@ var src_default = {
 
     const urlParam = url.searchParams.get("url");
     const regexParam = url.searchParams.get("regex");
-    const logLevelParam = url.searchParams.get("log_level");
+    const logLevelParam = url.searchParams.get("loglevel");
     if (!urlParam)
       return new Response("Missing URL parameter", { status: 400 });
     const backendParam = url.searchParams.get("bd");
@@ -3053,10 +3053,11 @@ var src_default = {
         if (regexParam == '1'){
           newResult = replaceIPAddresses(result);
         }
+        var newResult_2 = newResult;
         if (logLevelParam) {
-          newResult = replaceLogLevel(newResult, logLevelParam)
+          newResult_2 = replaceLogLevel(newResult, logLevelParam);
         }
-          return new Response(newResult, rpResponse);
+          return new Response(newResult_2, rpResponse);
       }
     }
     return rpResponse;
@@ -3064,14 +3065,11 @@ var src_default = {
 };
 
 function replaceLogLevel(inputText, logLevelParam) {
-  var regexPattern = /log-level:\s?(info|silent|error|warning|debug)/;
+  var regexPattern = /log-level: (info|silent|error|warning|debug)/;
   var match = inputText.match(regexPattern);
   if (match) {
-    // 提取匹配到的log-level
-    var logLevel = match[1];
-
     // 替换字符串中的log-level
-    var modifiedString = inputText.replace(regexPattern, 'log-level: ' + logLevelParam);
+    var modifiedString = inputText.replace(regexPattern, "log-level: " + logLevelParam);
 
     return modifiedString;
 }
