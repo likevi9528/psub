@@ -2953,6 +2953,7 @@ var src_default = {
 
     const urlParam = url.searchParams.get("url");
     const regexParam = url.searchParams.get("regex");
+    const logLevelParam = url.searchParams.get("log_level");
     if (!urlParam)
       return new Response("Missing URL parameter", { status: 400 });
     const backendParam = url.searchParams.get("bd");
@@ -3052,12 +3053,29 @@ var src_default = {
         if (regexParam == '1'){
           newResult = replaceIPAddresses(result);
         }
+        if (logLevelParam) {
+          newResult = replaceLogLevel(newResult, logLevelParam)
+        }
           return new Response(newResult, rpResponse);
       }
     }
     return rpResponse;
   }
 };
+
+function replaceLogLevel(inputText, logLevelParam) {
+  var regexPattern = /log-level:\s?(info|silent|error|warning|debug)/;
+  var match = inputText.match(regexPattern);
+  if (match) {
+    // 提取匹配到的log-level
+    var logLevel = match[1];
+
+    // 替换字符串中的log-level
+    var modifiedString = inputText.replace(regexPattern, 'log-level: ' + logLevelParam);
+
+    return modifiedString;
+}
+}
 
 function replaceIPAddresses(inputText) {
   // 正则表达式用于匹配Cloudflare的IP地址：119.29.29.29 和 223.5.5.5

@@ -15,7 +15,7 @@ KV或R2变量名：`SUB_BUCKET`
 指定后端地址
 $bd=https://api.v1.mk               # 肥羊增强，支持vless+hysteria订阅转换
 $bd=https://sub.d1.mk               # 肥羊备用，支持vless+hysteria订阅转换
-$bd=https://api.tsutsu.one              # 肥羊负载均衡
+$bd=https://api.tsutsu.one          # 肥羊负载均衡
 $bd=https://sub.id9.cc              # 品云，容易出现问题，不推荐
 $bd=https://v.id9.cc                # 品云实验
 $bd=https://id9.cc                  # 品云备用
@@ -26,7 +26,7 @@ $bd=https://pub-api-1.bianyuan.xyz  # 边缘
 $regex=1                            # 启动后将默认dns地址设置为127.0.0.1
 
 指定log-level
-$log_level=silent #silent, error, warning, info, debug
+$log_level=silent                   #silent, error, warning, info, debug
 
 指定mixed-port
 $mixed_port=7890
