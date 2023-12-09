@@ -12,6 +12,7 @@ https://youtu.be/X7CC5jrgazo
 KV或R2变量名：`SUB_BUCKET`
 
 ### 参数
+```
 指定后端地址
 &bd=https://api.v1.mk               # 肥羊增强，支持vless+hysteria订阅转换
 &bd=https://sub.d1.mk               # 肥羊备用，支持vless+hysteria订阅转换
@@ -32,7 +33,7 @@ KV或R2变量名：`SUB_BUCKET`
 &mixedport=7890
 &socksport=7891
 &httpport=7892
-
+```
 
 ### 支持反代转换的协议
  - shadowsocks
